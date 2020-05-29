@@ -7,10 +7,10 @@ import "./main.css";
 import pieImage from "../assets/pieChart.png";
 import barImage from "../assets/barChart.png";
 import lineImage from "../assets/lineChart.png";
-import tableImage from '../assets/table.png';
+import tableImage from "../assets/table.png";
 import styled from "styled-components";
 import Draggable from "react-draggable";
-import SingleTable from './SingleTable';
+import SingleTable from "./SingleTable";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -46,8 +46,8 @@ export default class DragLayout extends PureComponent {
           style={{ width: "100%", height: "100%" }}
         />
       );
-      if (l.type === 'table') {
-        component = <SingleTable/>;
+      if (l.type === "table") {
+        component = <SingleTable />;
       }
       return (
         <div key={l.i} data-grid={l}>
@@ -61,17 +61,19 @@ export default class DragLayout extends PureComponent {
   };
 
   addChart(type, x, y) {
+    console.log('original x,y', x, y)
     const width = document.getElementById("content").clientWidth;
-    const height = document.getElementById("content").clientHeight;
-    x = Math.floor((24 * (x - 214)) / width);
-    y = Math.floor((24 * y) / height);
+    x = Math.floor((24 * (x - 227)) / (width - 40));
+    y = Math.floor(y / 100);
+    console.log('calculated x,y', x ,y)
     const addItem = {
-      x: x > 0 ? x : 0,
-      y: y > 0 ? y : 0,
+      x: x >= 0 && y >= 0 ? x : 0,
+      y: y >= 0 && x >= 0 ? y : 0,
       w: 9,
       h: 2,
       i: new Date().getTime().toString(),
     };
+    console.log('transfer x,y', addItem.x ,addItem.y)
     this.setState({
       widgets: this.state.widgets.concat({
         ...addItem,
@@ -90,14 +92,14 @@ export default class DragLayout extends PureComponent {
     this.addChart(type, e.x, e.y);
   };
 
-  handleStart= e => {
-    e.preventDefault()
-    const copyElement = document.createElement('img');
-    copyElement.setAttribute('src', e.target.getAttribute('src'))
-    const style = `position: absolute;top: ${e.target.offsetTop}px;left: ${e.target.offsetLeft}px;z-index:2`
-    copyElement.setAttribute('style', style)
-    e.target.parentNode.appendChild(copyElement)
-  }
+  handleStart = (e) => {
+    e.preventDefault();
+    const copyElement = document.createElement("img");
+    copyElement.setAttribute("src", e.target.getAttribute("src"));
+    const style = `position: absolute;top: ${e.target.offsetTop}px;left: ${e.target.offsetLeft}px;z-index:2`;
+    copyElement.setAttribute("style", style);
+    e.target.parentNode.appendChild(copyElement);
+  };
 
   render() {
     const LeftMenu = styled.div`
@@ -127,25 +129,25 @@ export default class DragLayout extends PureComponent {
             onStop={(e) => this.handleStop(e, "pie")}
             onStart={this.handleStart}
             bounds={{ left: 80 }}
-            >
-            <img src={pieImage} alt='无法显示'/>
+          >
+            <img src={pieImage} alt="无法显示" />
           </Draggable>
           <Draggable
             onStop={(e) => this.handleStop(e, "line")}
             onStart={this.handleStart}
             bounds={{ left: 80 }}
           >
-            <img src={lineImage} alt='无法显示' />
+            <img src={lineImage} alt="无法显示" />
           </Draggable>
           <Draggable
             onStop={(e) => this.handleStop(e, "bar")}
             onStart={this.handleStart}
             bounds={{ left: 80 }}
           >
-            <img src={barImage} alt='无法显示'/>
+            <img src={barImage} alt="无法显示" />
           </Draggable>
           <Draggable
-            onStop={e => this.handleStop(e, 'table')}
+            onStop={(e) => this.handleStop(e, "table")}
             onStart={this.handleStart}
             bounds={{ left: 80 }}
           >
@@ -153,12 +155,15 @@ export default class DragLayout extends PureComponent {
           </Draggable>
         </LeftMenu>
         <div
-          style={{ padding: 20, height: "100vh", marginLeft: 169, overflow:'auto' }}
+          style={{
+            padding: 20,
+            height: "100vh",
+            marginLeft: 169,
+            overflow: "auto",
+          }}
           id="content"
         >
-          <ResponsiveReactGridLayout
-            {...this.props}
-          >
+          <ResponsiveReactGridLayout {...this.props}>
             {this.generateDOM()}
           </ResponsiveReactGridLayout>
         </div>

@@ -153,7 +153,7 @@ export default class DragLayout extends PureComponent {
           </Draggable>
         </LeftMenu>
         <div
-          style={{ padding: 20, minHeight: "100vh", marginLeft: 169 }}
+          style={{ padding: 20, height: "100vh", marginLeft: 169, overflow:'auto' }}
           id="content"
         >
           <ResponsiveReactGridLayout

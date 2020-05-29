@@ -64,7 +64,7 @@ export default class DragLayout extends PureComponent {
     console.log('original x,y', x, y)
     const width = document.getElementById("content").clientWidth;
     x = Math.floor((24 * (x - 227)) / (width - 40));
-    y = Math.floor(y / this.state.rowHeight);
+    y = Math.floor(y / this.props.rowHeight);
     console.log('calculated x,y', x ,y)
     const addItem = {
       x: x >= 0 && y >= 0 ? x : 0,

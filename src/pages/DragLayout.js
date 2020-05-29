@@ -4,11 +4,13 @@ import _ from "lodash";
 import ReactEcharts from "echarts-for-react";
 import { getBarChart, getLineChart, getPieChart } from "./chart";
 import "./main.css";
-import pieImage from "../assets/chart/pieChart.png";
-import barImage from "../assets/chart/barChart.png";
-import lineImage from "../assets/chart/lineChart.png";
+import pieImage from "../assets/pieChart.png";
+import barImage from "../assets/barChart.png";
+import lineImage from "../assets/lineChart.png";
+import tableImage from '../assets/table.png';
 import styled from "styled-components";
 import Draggable from "react-draggable";
+import SingleTable from './SingleTable';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -44,6 +46,9 @@ export default class DragLayout extends PureComponent {
           style={{ width: "100%", height: "100%" }}
         />
       );
+      if (l.type === 'table') {
+        component = <SingleTable/>;
+      }
       return (
         <div key={l.i} data-grid={l}>
           <span className="remove" onClick={this.onRemoveItem.bind(this, i)}>
@@ -56,7 +61,6 @@ export default class DragLayout extends PureComponent {
   };
 
   addChart(type, x, y) {
-    console.log('x', x, y)
     const width = document.getElementById("content").clientWidth;
     const height = document.getElementById("content").clientHeight;
     x = Math.floor((24 * (x - 214)) / width);
@@ -68,11 +72,6 @@ export default class DragLayout extends PureComponent {
       h: 2,
       i: new Date().getTime().toString(),
     };
-    console.log(
-      "coordinate",
-      Math.floor((24 * (x - 214)) / width),
-      Math.floor((24 * y) / height)
-    );
     this.setState({
       widgets: this.state.widgets.concat({
         ...addItem,
@@ -144,6 +143,13 @@ export default class DragLayout extends PureComponent {
             bounds={{ left: 80 }}
           >
             <img src={barImage} alt='无法显示'/>
+          </Draggable>
+          <Draggable
+            onStop={e => this.handleStop(e, 'table')}
+            onStart={this.handleStart}
+            bounds={{ left: 80 }}
+          >
+            <img src={tableImage} alt="无法显示" />
           </Draggable>
         </LeftMenu>
         <div
